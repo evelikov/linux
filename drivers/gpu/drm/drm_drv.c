@@ -432,8 +432,6 @@ static void drm_fs_inode_free(struct inode *inode)
  * The initial ref-count of the object is 1. Use drm_dev_get() and
  * drm_dev_put() to take and drop further ref-counts.
  *
- * Note that for purely virtual devices @parent can be NULL.
- *
  * Drivers that do not want to allocate their own device struct
  * embedding &struct drm_device can call drm_dev_alloc() instead. For drivers
  * that do embed &struct drm_device it must be placed first in the overall
@@ -457,6 +455,8 @@ int drm_dev_init(struct drm_device *dev,
 		DRM_ERROR("DRM core is not initialized\n");
 		return -ENODEV;
 	}
+
+	BUG_ON(parent == NULL);
 
 	kref_init(&dev->ref);
 	dev->dev = parent;
@@ -506,9 +506,7 @@ int drm_dev_init(struct drm_device *dev,
 		}
 	}
 
-	/* Use the parent device name as DRM device unique identifier, but fall
-	 * back to the driver name for virtual devices like vgem. */
-	ret = drm_dev_set_unique(dev, parent ? dev_name(parent) : driver->name);
+	ret = drm_dev_set_unique(dev, dev_name(parent));
 	if (ret)
 		goto err_setunique;
 
