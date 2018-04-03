@@ -295,7 +295,7 @@ static int drm_dev_set_unique(struct drm_device *dev, const char *name)
 		return -EINVAL;
 
 	kfree(dev->unique);
-	dev->unique = kstrdup(name, GFP_KERNEL);
+	dev->unique = kasprintf(GFP_KERNEL, "pci:%s", name);
 
 	return dev->unique ? 0 : -ENOMEM;
 }
