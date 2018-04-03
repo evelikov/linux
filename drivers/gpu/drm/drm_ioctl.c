@@ -123,6 +123,7 @@ int drm_getunique(struct drm_device *dev, void *data,
 	u->unique_len = master->unique_len;
 	mutex_unlock(&master->dev->master_mutex);
 
+	DRM_ERROR("%s: unique %s\n", __func__, u->unique);
 	return 0;
 }
 
@@ -143,6 +144,8 @@ static int drm_set_busid(struct drm_device *dev, struct drm_file *file_priv)
 	if (master->unique != NULL)
 		drm_unset_busid(dev, master);
 
+	DRM_ERROR("%s: dev %p, is_pci %d\n", __func__, dev->dev,
+		  (dev->dev) ? dev_is_pci(dev->dev) : 0);
 	if (dev->dev && dev_is_pci(dev->dev)) {
 		ret = drm_pci_set_busid(dev, master);
 		if (ret) {
@@ -155,6 +158,7 @@ static int drm_set_busid(struct drm_device *dev, struct drm_file *file_priv)
 		if (master->unique)
 			master->unique_len = strlen(dev->unique);
 	}
+	DRM_ERROR("%s: unique %s\n", __func__, master->unique);
 
 	return 0;
 }

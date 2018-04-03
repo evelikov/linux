@@ -56,6 +56,7 @@ int drm_virtio_init(struct drm_driver *driver, struct virtio_device *vdev)
 	dev = drm_dev_alloc(driver, &vdev->dev);
 	if (IS_ERR(dev))
 		return PTR_ERR(dev);
+	DRM_ERROR("%s: #1 dev->unique %s\n", __func__, dev->unique);
 	vdev->priv = dev;
 
 	if (strcmp(vdev->dev.parent->bus->name, "pci") == 0) {
@@ -75,6 +76,7 @@ int drm_virtio_init(struct drm_driver *driver, struct virtio_device *vdev)
 	if (ret)
 		goto err_free;
 
+	DRM_ERROR("%s: #2 dev->unique %s\n", __func__, dev->unique);
 	return 0;
 
 err_free:
