@@ -126,6 +126,23 @@ enum drm_ioctl_flags {
 	 * not set DRM_AUTH because they do not require authentication.
 	 */
 	DRM_RENDER_ALLOW	= BIT(5),
+	/**
+	 * @DRM_FORCE_AUTH:
+	 *
+	 * Authentication of the primary node is mandatory. Regardless that the
+	 * user can usually circumvent that by using the render node with exact
+	 * same ioctl.
+	 *
+	 * Note: this is effectively a workaround for AMDGPU AMDGPU_INFO ioctl
+	 * and the RADV Mesa driver. This is required for Mesa:
+	 *  - the whole 18.2.x series, which is EOL
+	 *  - the whole 18.3.x series, which is EOL
+	 *  - the 19.0.x series, prior to 19.0.4
+	 *
+	 * Note: later patch will effectively drop the DRM_AUTH for ioctls
+	 * annotated as DRM_AUTH | DRM_RENDER_ALLOW.
+	 */
+	DRM_FORCE_AUTH          = BIT(6),
 };
 
 /**

@@ -40,6 +40,22 @@ config DRM_AMDGPU_GART_DEBUGFS
 	  Selecting this option creates a debugfs file to inspect the mapped
 	  pages. Uses more memory for housekeeping, enable only for debugging.
 
+config DRM_AMDGPU_FORCE_AUTH
+	bool "Force authentication check on AMDGPU_INFO ioctl"
+	default y
+	help
+	  There were some version of the Mesa RADV drivers, which relied on
+	  the ioctl failing, if the client is not authenticated.
+
+	  Namely, the following versions are affected:
+	    - the whole 18.2.x series, which is EOL
+	    - the whole 18.3.x series, which is EOL
+	    - the 19.0.x series, prior to 19.0.4
+
+	  Modern distributions, should disable this. That will allow various
+	  other clients to work, that would otherwise require root privileges.
+
+
 source "drivers/gpu/drm/amd/acp/Kconfig"
 source "drivers/gpu/drm/amd/display/Kconfig"
 source "drivers/gpu/drm/amd/amdkfd/Kconfig"

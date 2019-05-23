@@ -544,6 +544,11 @@ int drm_ioctl_permit(u32 flags, struct drm_file *file_priv)
 		     drm_is_render_client(file_priv)))
 		return -EACCES;
 
+	/* FORCE_AUTH is only for authenticated or render client */
+	if (unlikely((flags & DRM_FORCE_AUTH) && !drm_is_render_client(file_priv) &&
+		     !file_priv->authenticated))
+		return -EACCES;
+
 	return 0;
 }
 EXPORT_SYMBOL(drm_ioctl_permit);
